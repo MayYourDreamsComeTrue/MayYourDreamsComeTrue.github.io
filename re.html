@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Cake - A Birthday Mission</title>
+    <!-- pixelowy font z dysku (bez CDN - działa na GitHub Pages i offline) -->
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <link rel="icon" href="assets/icons/re.png">
+    <link rel="stylesheet" href="re.css">
+</head>
+<body>
+    <!-- obraz 3D renderowany w niższej rozdzielczości i powiększany "pixelowo" -->
+    <canvas id="reCanvas"></canvas>
+
+    <!-- ===== HUD ===== -->
+    <div id="hud" class="hidden">
+        <div id="objective" class="hud-box"><small>OBJECTIVE</small><span id="objText">-</span></div>
+        <div id="love" class="hud-box"><small>PARTNER</small><span id="loveHearts"></span></div>
+        <div id="gems" class="hud-box"><img src="assets/primogem.png" alt="Primogems"><b id="gemCount">0</b></div>
+        <div id="health" class="hud-box">
+            <span id="hpState" class="fine">FINE</span>
+            <div class="hp-bar"><i id="hpFill"></i></div>
+            <span class="herbs">HERBS <b id="herbCount">0</b> <small>[H] &middot; CASE [Tab]</small></span>
+        </div>
+        <div id="weapon" class="hud-box">
+            <span id="wpName">HANDGUN</span>
+            <span class="ammo"><b id="ammoMag">10</b> / <span id="ammoRes">30</span></span>
+            <span class="slots"><i id="slot1" class="on">1</i><i id="slot2">2</i></span>
+            <span id="reloadTag" class="hidden">RELOADING...</span>
+        </div>
+        <div id="cross" class="hidden"></div>
+        <div id="hitMark" class="hidden"></div>
+        <div id="prompt" class="hidden"></div>
+        <div id="bossBar" class="hidden"><small id="bossName">THE PARTY POOPER</small><div class="boss-bar"><i id="bossFill"></i></div></div>
+        <div id="toasts"></div>
+        <div id="bubble" class="hidden"></div>
+        <div id="sub" class="hidden"></div>
+    </div>
+    <!-- karta rozdziału (na chwilę po starcie rozdziału) -->
+    <div id="chapterCard" class="hidden"><small id="chNum">CHAPTER 1</small><b id="chName">-</b></div>
+    <div id="hurt"></div>
+
+    <!-- ===== PRZERYWNIK: czarne pasy, napisy, wielki tekst ===== -->
+    <div id="cut">
+        <div class="bar top"></div>
+        <div class="bar bottom"></div>
+        <div id="cutBig" class="hidden"></div>
+        <div id="cutBox" class="hidden"><b id="cutName"></b><p id="cutText"></p><div id="cutChoices" class="hidden"></div></div>
+        <div id="cutHint" class="hidden">Space: next &middot; Esc: skip</div>
+    </div>
+
+    <!-- ===== EKRANY ===== -->
+    <section id="title" class="screen">
+        <div class="frame">
+            <h1 class="title">RESIDENT CAKE</h1>
+            <p class="subtitle">~ A Birthday Mission ~</p>
+            <p>Someone stole the birthday cake. Grab your partner, rescue the cake, protect the presents and make a wish!</p>
+            <ul class="keys">
+                <li><b>WASD</b> move &middot; <b>Shift</b> run</li>
+                <li><b>Mouse</b> look &middot; <b>Right button</b> aim &middot; <b>Left button</b> shoot (knife when not aiming)</li>
+                <li><b>R</b> reload &middot; <b>1 / 2</b> weapons in your case</li>
+                <li><b>E</b> interact / kick staggered enemies &middot; <b>H</b> use a herb</li>
+                <li><b>Tab / I</b> attaché case (drag items, <b>R</b> rotates)</li>
+            </ul>
+            <div class="title-btns">
+                <button id="startBtn" class="btn">&#9654; New game</button>
+                <button id="continueBtn" class="btn hidden">&#9654; Continue</button>
+                <button id="chaptersBtn" class="btn hidden">Chapters</button>
+            </div>
+            <div id="chapterList" class="chapter-list hidden"></div>
+            <p class="hint">Esc pauses &middot; works best with a mouse</p>
+        </div>
+    </section>
+
+    <section id="paused" class="screen hidden">
+        <div class="frame">
+            <h1 class="title">PAUSED</h1>
+            <p>Click to resume</p>
+            <button id="resumeBtn" class="btn">&#9654; Resume</button>
+        </div>
+    </section>
+
+    <section id="dead" class="screen hidden">
+        <div class="frame">
+            <h1 class="title lose">YOU ARE DEAD</h1>
+            <p>...and the cake is still missing.</p>
+            <button id="retryBtn" class="btn">&#8635; Retry from checkpoint</button>
+        </div>
+    </section>
+
+    <!-- walizka (Tab / I) - ta sama u kupca -->
+    <section id="case" class="screen hidden">
+        <div class="case">
+            <div class="case-head">
+                <h2 id="caseTitle">ATTACHÉ CASE</h2>
+                <div class="case-tabs"><button id="tabCase" class="tab on">CASE</button><button id="tabKeys" class="tab">KEY ITEMS</button></div>
+                <div class="case-money"><img src="assets/primogem.png" alt="Primogems"><b id="caseGems">0</b></div>
+            </div>
+            <div class="case-body">
+                <div class="case-left">
+                    <div id="caseGrid" class="case-grid"></div>
+                    <div id="keyList" class="key-list hidden"></div>
+                </div>
+                <div class="case-side">
+                    <div class="item-info"><b id="infoName">-</b><p id="infoDesc"></p><span id="infoQty"></span></div>
+                    <div class="item-btns">
+                        <button id="btnUse" class="btn small">Use</button>
+                        <button id="btnCombine" class="btn small">Combine</button>
+                        <button id="btnDiscard" class="btn small">Discard</button>
+                        <button id="btnSell" class="btn small hidden">Sell</button>
+                    </div>
+                    <div id="shopPanel" class="shop-panel hidden"><small>FOR SALE (1-5)</small><div id="shopList"></div></div>
+                    <p id="caseStatus" class="case-status"></p>
+                    <div class="case-love">PARTNER <span id="caseLove"></span></div>
+                </div>
+            </div>
+            <div class="case-foot"><span>Drag to move &middot; R rotates while dragging &middot; drop a herb on a herb to mix</span><button id="caseClose" class="btn small">Close [Tab]</button></div>
+        </div>
+    </section>
+
+    <section id="end" class="screen hidden">
+        <div class="frame">
+            <h1 class="title">HAPPY BIRTHDAY!</h1>
+            <p class="subtitle">Mission complete - the cake is safe!</p>
+            <ul id="stats"></ul>
+            <p>May every wish come true.</p>
+            <button id="againBtn" class="btn">&#8635; Play again</button>
+        </div>
+    </section>
+
+    <!-- monit "PC ONLY": za małe okno albo sam ekran dotykowy -->
+    <div id="pcOnly" class="pc-only hidden" role="alertdialog" aria-labelledby="pcOnlyTitle">
+        <div class="frame">
+            <h1 id="pcOnlyTitle" class="title">PC ONLY</h1>
+            <p>This game is designed for PC only.</p>
+            <p>Please use a bigger window (at least <b id="pcMin">816×560</b>).</p>
+            <p id="pcTouch" class="hidden">Touch screens are not supported. Please use a mouse and keyboard.</p>
+            <p>Your window: <b id="pcSize">0×0</b></p>
+        </div>
+    </div>
+
+    <div id="loadErr" class="hidden">Sorry - this game needs WebGL (3D graphics), which your browser has turned off.</div>
+
+    <!-- three.js lokalnie (vendor/), potem gra; zwykłe skrypty, więc działa też z dysku (file://) -->
+    <script src="vendor/three.min.js"></script>
+    <script src="re/models.js"></script>
+    <script src="re/world.js"></script>
+    <script src="re/actors.js"></script>
+    <script src="re/cutscenes.js"></script>
+    <script src="re/inventory.js"></script>
+    <script src="re/game.js"></script>
+</body>
+</html>

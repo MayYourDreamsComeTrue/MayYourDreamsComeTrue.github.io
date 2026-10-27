@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>May Your Dreams Come True</title>
+    <!-- pixelowy font retro - z dysku (assets/fonts), bez Google Fonts, więc działa offline i na GitHub Pages -->
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <link rel="icon" href="assets/primogem.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- gwiaździste tło za ramkami (jak na griffin3q.github.io) -->
+    <canvas id="bgStars"></canvas>
+
+    <div id="app">
+        <!-- EKRAN 1: menu -->
+        <section id="menu" class="screen active">
+            <div id="menuFrame" class="frame">
+            <h1 class="title">May Your Dreams Come True</h1>
+            <p class="subtitle">Catch 160 Primogems to make a Wish!</p>
+            <button id="playBtn" class="btn">▶ Play</button>
+            <p class="hint">Move with ← → &nbsp;·&nbsp; Miss 5 and it's over</p>
+            </div>
+        </section>
+
+        <!-- EKRAN 2: mini gra -->
+        <section id="game" class="screen">
+            <canvas width="800" height="600" id="gameCanvas"></canvas>
+        </section>
+
+        <!-- EKRAN 3: przegrana -->
+        <section id="lose" class="screen">
+            <div id="loseFrame" class="frame">
+            <h1 class="title lose-title">Game Over</h1>
+            <p class="subtitle">Too many Primogems slipped away...</p>
+            <p class="subtitle">You caught <span id="loseScore">0</span> / 160 <img src="assets/primogem.png" class="primo-icon" alt="✦"></p>
+            <button id="retryBtn" class="btn">↻ Try Again</button>
+            </div>
+        </section>
+
+        <!-- EKRAN 4: baner wisha (jak w Genshinie) -->
+        <section id="banner" class="screen">
+            <div class="banner-box">
+                <!-- waluty w prawym górnym rogu -->
+                <div class="currency">
+                    <span class="cur primo"><img src="assets/primogem.png" class="primo-icon" alt="✦"> <b id="primoCount">160</b></span>
+                    <span class="cur fate"><img src="assets/fate.png" class="fate-icon" alt="◆"> <b id="fateCount">0</b></span>
+                </div>
+
+                <!-- baner jak w grze (Starry Night's Whispers - Citlali) - Leona tu NIE widać, ma być niespodzianką;
+                     plik 960x540 (16:9), w ramce pokazany mniejszy, więc ostry też na ekranach HiDPI -->
+                <img src="assets/banner-citlali.png" class="banner-img" width="960" height="540"
+                     alt="Starry Night's Whispers - New Wish Available - Character Event Wish-2 - Citlali, Obsidian Opalstar">
+
+                <div class="banner-buttons">
+                    <button id="wishBtn" class="btn wish-btn">
+                        Wish ×1<br><small><img src="assets/fate.png" class="fate-icon" alt="◆"> × 1</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- okienko wymiany primogemów (jak w grze, gdy brakuje Fate) -->
+            <div id="exchangeDialog" class="dialog hidden">
+                <div class="dialog-box">
+                    <h3>Insufficient Intertwined Fates</h3>
+                    <p>Exchange <b>160 <img src="assets/primogem.png" class="primo-icon" alt="✦"> Primogems</b><br>for <b>1 <img src="assets/fate.png" class="fate-icon" alt="◆"> Intertwined Fate</b>?</p>
+                    <div class="dialog-buttons">
+                        <button id="cancelBtn" class="btn btn-grey">Cancel</button>
+                        <button id="confirmBtn" class="btn">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EKRAN 5: animacja wisha + reveal -->
+        <section id="wish" class="screen">
+            <canvas width="800" height="600" id="wishCanvas"></canvas>
+            <button id="skipBtn" class="skip-btn">Skip ▸▸</button>
+
+            <div id="reveal" class="hidden">
+                <div class="rays"></div>
+                <img src="assets/leon.png" id="revealLeon" class="leon-sprite" alt="Leon S. Kennedy">
+                <div class="reveal-info">
+                    <span class="new-tag">NEW</span>
+                    <h2 class="char-name">Leon S. Kennedy</h2>
+                    <div class="reveal-stars">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                    <p class="wishes">"Happy Birthday! Your mission today:<br>have fun and make every wish come true."</p>
+                    <button id="againBtn" class="btn">↻ Play Again</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- monit "PC ONLY": za małe okno albo telefon/tablet (pokazuje i chowa app.js) -->
+    <div id="pcOnly" class="pc-only hidden" role="alertdialog" aria-labelledby="pcOnlyTitle">
+        <div class="pc-only-box">
+            <h1 id="pcOnlyTitle" class="title">PC ONLY</h1>
+            <p>This site is designed for PC only.</p>
+            <p>Please open it on a computer with a bigger window
+               (at least <b id="pcMin">1024×640</b>).</p>
+            <p id="pcTouch" class="hidden">Touch screens are not supported. Please use a mouse and keyboard.</p>
+            <p class="pc-size">Your window: <b id="pcSize">0×0</b></p>
+            <p class="pc-hint">Try maximizing the window or zooming out (Ctrl -).</p>
+        </div>
+    </div>
+
+    <!-- pixelowa kurtyna przejścia mini gra -> baner (rysuje app.js) -->
+    <canvas id="wipeCanvas" class="hidden"></canvas>
+
+    <script src="bg.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,514 @@
+/* =====================================================================
+   PALETA KOLORÓW
+
+   Wszystkie kolory strony i gry są tutaj, w jednym miejscu.
+   Zmieniasz wartość, a zmienia się wszędzie.
+   Sekcję 6 (GRA) czytają też app.js i bg.js, więc po zmianie
+   trzeba odświeżyć stronę (Ctrl+Shift+R).
+   ===================================================================== */
+
+:root {
+
+    /* ========== 1. OGÓLNE ========== */
+
+    --bg:              #2a2b6f;              /* tło strony pod gwiazdkami */
+    --text:            #f4f0e6;              /* zwykły tekst */
+    --shadow:          #000000;              /* pixelowe cienie i czarne obrysy */
+    --border:          #f4f0e6;              /* jasna ramka wokół ekranów */
+    --panel:           #f26dab;              /* tło okienek (dialog, waluty, skip) */
+    --overlay:         rgba(0, 0, 0, 0.7);   /* przyciemnienie pod okienkiem */
+    --crt-lines:       rgba(0, 0, 0, 0.18);  /* paski CRT (alfa 0 = wyłączone) */
+
+    /* ========== 2. AKCENTY ========== */
+
+    --gold:            #f6e9f2;              /* złoto: tytuły, gwiazdki, przyciski */
+    --gold-dark:       #cfb2c6;              /* ciemne złoto: cienie */
+    --gold-light:      #ffffff;              /* jasne złoto: odblaski */
+    --pink:            #f881ad;              /* róż: tag NEW, Game Over */
+    --pink-dark:       #8f1f69;              /* cień napisu Game Over */
+    --cyan:            #5fe1ff;              /* licznik primogemów na banerze */
+    --purple:          #b98cff;              /* licznik Intertwined Fate */
+
+    /* ========== 3. PRZYCISKI ========== */
+
+    --btn-text:        #fd93c5;              /* tekst na złotym przycisku */
+    --btn-grey:        #c2c3c7;              /* przycisk Cancel */
+    --btn-grey-dark:   #5f574f;              /* cień przycisku Cancel */
+    --btn-grey-text:   #1d1d1d;              /* tekst przycisku Cancel */
+
+    /* ========== 4. TŁA EKRANÓW ========== */
+    /* zamiast koloru możesz dać obrazek: url("assets/plik.png") center / cover */
+
+    --menu-bg:         #a16ad9;              /* ekran Play */
+    --lose-bg:         #986fc1;              /* ekran Game Over */
+    --banner-bg:       linear-gradient(160deg, #fd93c5, #986fc1 70%); /* ekran banera */
+
+    /* ========== 5. KARTA POSTACI (po pullu) ========== */
+
+    --reveal-center:   #ffe7a8;              /* środek złotej poświaty */
+    --reveal-mid:      #c9932e;              /* środek -> brzeg */
+    --reveal-edge:     #3b2508;              /* brzegi */
+    --reveal-rays:     rgba(255, 255, 255, 0.18); /* obracające się promienie */
+    --wishes-bg:       rgba(0, 0, 0, 0.55);  /* tło ramki z życzeniami */
+
+    /* ========== 6. GRA (canvas) - czytane przez app.js i bg.js ========== */
+
+    /* mini gra */
+    --game-gem:        #7fe3ff;              /* romb primogemu - już tylko zapas, gdy primogem.png się nie wczyta */
+    --game-gem-shine:  #ffffff;              /* błysk na rombie - też tylko zapas */
+    --game-hud-bg:     rgba(0, 0, 0, 0.5);   /* pasek z wynikiem */
+    --game-score:      #7fe3ff;              /* licznik primogemów w grze */
+    --game-lives:      #ff6b8a;              /* serduszka */
+
+    /* gwiazdki w tle strony */
+    --star:            #ffffff;              /* gwiazdka */
+    --star-glow:       #e3e3e3;              /* jej poświata */
+
+    /* animacja wisha */
+    --wish-3star:      #7fb4ff;              /* meteor 3★ (niebieski) */
+    --wish-4star:      #c58bff;              /* meteor 4★ (fioletowy) */
+    --wish-5star:      #ffd36e;              /* meteor 5★ (złoty) - najlepszy */
+    --wish-flash:      #fff6d0;              /* błysk po uderzeniu */
+
+    /* przejście po wygranej (mini gra -> baner) */
+    --win-text:        #ffd36e;              /* napis WISH UNLOCKED! */
+    --win-text-shadow: #8f1f69;              /* jego kolorowy cień (czarny dochodzi z --shadow) */
+    --win-score-pulse: #ffd36e;              /* licznik w pasku pulsuje na złoto */
+    --win-sparkle:     #fff6d0;              /* iskierki z kryształów i ślad lecących primogemów */
+    --win-wipe:        #1b1446;              /* kolor pixelowej kurtyny */
+
+    /* ========== 7. FONT ========== */
+
+    --font:            "Press Start 2P", "Courier New", monospace;
+}
+
+/* ===================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 12px;
+    line-height: 1.8;
+    user-select: none;          /* blokada zaznaczania tekstu */
+    -webkit-user-select: none;  /* to samo dla Chrome/Safari */
+    overflow: hidden;           /* bez pasków przewijania */
+}
+
+img { -webkit-user-drag: none; } /* obrazków nie da się przeciągać */
+
+#app {
+    width: 100%;
+    min-height: 100vh; /* pełna wysokość okna - centrowanie w pionie */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* gwiaździste tło za ramkami (bg.js) */
+#bgStars {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: block;
+}
+
+/* efekt starego monitora CRT - poziome paski na całej stronie */
+#app::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;     /* nie blokuje kliknięć */
+    will-change: transform;   /* własna warstwa GPU */
+    transform: translateZ(0);
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 2px,
+        var(--crt-lines) 3px
+    );
+    z-index: 100;
+}
+/* gra w okienku na pulpicie (index.html): paski CRT rysuje już pulpit, więc tu ich nie dublujemy */
+html.embedded #app::after { display: none; }
+
+/* ===== PIXELOWA RAMKA ===== */
+.frame, .banner-box, #gameCanvas, #reveal, .dialog-box {
+    border: 4px solid var(--border);
+    box-shadow:
+        0 0 0 4px var(--shadow),      /* czarny obrys */
+        8px 8px 0 4px var(--shadow);  /* twardy cień w prawo-dół */
+}
+
+/* ===== EKRANY - widać tylko ten z klasą .active ===== */
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    position: relative;
+}
+.screen.active { display: flex; }
+.hidden { display: none !important; }
+
+/* ===== TEKSTY ===== */
+.title {
+    font-size: 26px;
+    line-height: 1.5;
+    color: var(--gold);
+    text-shadow: 4px 4px 0 var(--gold-dark), 8px 8px 0 var(--shadow);
+}
+.lose-title {
+    color: var(--pink);
+    text-shadow: 4px 4px 0 var(--pink-dark), 8px 8px 0 var(--shadow);
+    animation: shake 0.5s steps(2) 2;
+}
+.subtitle { font-size: 12px; }
+.hint {
+    font-size: 10px;
+    opacity: 0.7;
+    animation: blink 1s steps(1) infinite; /* migający napis jak "INSERT COIN" */
+}
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes shake {
+    0%   { transform: translateX(-6px); }
+    100% { transform: translateX(6px); }
+}
+
+/* ===== PRZYCISKI ===== */
+.btn {
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 14px 28px;
+    background: var(--gold);
+    color: var(--btn-text);
+    border: 4px solid var(--shadow);
+    box-shadow:
+        inset -4px -4px 0 var(--gold-dark),  /* ciemny dół = efekt 3D */
+        inset 4px 4px 0 var(--gold-light),   /* jasna góra */
+        4px 4px 0 var(--shadow);
+    cursor: pointer;
+}
+.btn:hover  { filter: brightness(1.1); transform: translate(-2px, -2px); }
+.btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: inset 4px 4px 0 var(--gold-dark), 0 0 0 var(--shadow);
+}
+.btn-grey {
+    background: var(--btn-grey);
+    color: var(--btn-grey-text);
+    box-shadow:
+        inset -4px -4px 0 var(--btn-grey-dark),
+        inset 4px 4px 0 #fff,
+        4px 4px 0 var(--shadow);
+}
+
+/* ===== PLANSZA GRY ===== */
+#gameCanvas { image-rendering: pixelated; display: block; }
+.leon-sprite { image-rendering: pixelated; }
+
+/* ===== RAMKI MENU I PRZEGRANEJ (800x600 jak gra) ===== */
+.frame {
+    width: 800px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 40px;
+    overflow: hidden;
+}
+#menuFrame { background: var(--menu-bg); }
+#loseFrame { background: var(--lose-bg); }
+
+/* ===== BANER WISHA ===== */
+.banner-box {
+    width: 800px;
+    height: 600px;
+    background: var(--banner-bg);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+}
+.banner-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 4px solid var(--gold);
+    box-shadow: 0 0 0 4px var(--shadow), 6px 6px 0 4px var(--shadow);
+}
+.currency {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    gap: 10px;
+}
+.cur {
+    background: var(--panel);
+    border: 3px solid var(--border);
+    padding: 7px 12px;         /* więcej miejsca wokół ikonki 32x32 */
+    font-size: 12px;
+    display: inline-flex;      /* ikonka i liczba w jednym rzędzie, */
+    align-items: center;       /* liczba wyśrodkowana w pionie */
+    gap: 8px;                  /* odstęp ikonka - liczba */
+}
+/* w liczniku ikonka bez ujemnego marginesu (on jest tylko dla ikonek w zwykłym tekście) */
+.cur .primo-icon,
+.cur .fate-icon { margin: 0; }
+.cur.primo { color: var(--cyan); }
+/* ikonka primogemu (assets/primogem.png, 32x32) w tekście - rysowana 1:1, żeby piksele były ostre;
+   ujemny margines, żeby duża ikonka nie rozpychała wysokości linii */
+.primo-icon {
+    width: 32px;
+    height: 32px;
+    margin: -10px -4px -10px -6px;
+    vertical-align: middle;
+    image-rendering: pixelated;
+}
+/* ikonka Intertwined Fate (assets/fate.png, 64x64 - nie pixel art) - te same zasady co primogem,
+   ale pokazana w 32x32 z wygładzaniem (na ekranach HiDPI widać pełne 64 px) */
+.fate-icon {
+    width: 32px;
+    height: 32px;
+    margin: -10px -4px -10px -6px;
+    vertical-align: middle;
+    image-rendering: auto;
+}
+.cur.fate  { color: var(--purple); }
+.bump { animation: bump 0.4s ease-out; }
+@keyframes bump { 50% { transform: scale(1.3); } }
+
+.banner-buttons { display: flex; justify-content: flex-end; margin-top: 28px; }
+.wish-btn { line-height: 1.8; }
+.wish-btn small { font-size: 10px; }
+/* koszt wisha: mniejsza ikonka Fate, żeby przycisk nie urósł */
+.wish-btn .fate-icon { width: 20px; height: 20px; margin: -6px 2px -6px 0; }
+
+/* ===== OKIENKO WYMIANY (styl RPG) ===== */
+.dialog {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dialog-box {
+    background: var(--panel);
+    color: var(--text);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    line-height: 2;
+    max-width: 520px;
+}
+.dialog-box h3 { color: var(--gold); font-size: 13px; }
+.dialog-box b  { color: var(--cyan); }
+/* ikonka primogemu w okienku wymiany: bez ujemnego marginesu, z odstępem od słów,
+   a linie trochę wyższe, żeby się nie stykały */
+.dialog-box p { line-height: 2.2; }
+.dialog-box .primo-icon,
+.dialog-box .fate-icon { margin: 0 6px; }
+.dialog-buttons { display: flex; gap: 20px; justify-content: center; }
+
+/* ===== ANIMACJA WISHA - meteor leci po gwiaździstym tle strony ===== */
+#wish {
+    width: 808px;   /* stały rozmiar (800 + ramka) dla karty z Leonem */
+    height: 608px;
+}
+#wishCanvas {
+    position: fixed;  /* na cały ekran, przezroczysty - widać gwiazdki z tła */
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+}
+.skip-btn {
+    position: fixed;
+    top: 28px;
+    right: 32px;
+    font-family: var(--font);
+    font-size: 20px;
+    padding: 16px 28px;
+    background: var(--panel);
+    color: var(--text);
+    border: 4px solid var(--border);
+    box-shadow: 0 0 0 4px var(--shadow), 6px 6px 0 4px var(--shadow);
+    cursor: pointer;
+    z-index: 5;
+}
+.skip-btn:hover  { color: var(--gold); transform: translate(-2px, -2px); }
+.skip-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 4px var(--shadow); }
+
+/* ===== REVEAL POSTACI ===== */
+#reveal {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at 35% 50%,
+        var(--reveal-center), var(--reveal-mid) 45%, var(--reveal-edge) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 30px;
+    z-index: 2;
+}
+.rays {
+    position: absolute;
+    width: 1000px;
+    height: 1000px;
+    left: calc(35% - 500px);
+    top: calc(50% - 500px);
+    background: repeating-conic-gradient(var(--reveal-rays) 0 10deg, transparent 10deg 20deg);
+    will-change: transform;   /* obrót liczy karta graficzna */
+    animation: spin 20s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#revealLeon {
+    width: 320px;
+    height: 320px;
+    position: relative;
+    border: 4px solid var(--border);
+    box-shadow: 0 0 0 4px var(--shadow), 8px 8px 0 4px var(--shadow);
+    will-change: transform, opacity;
+    animation: slideIn 0.9s ease-out both;
+}
+@keyframes slideIn {
+    from { transform: translateX(-200px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+.reveal-info {
+    position: relative;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 360px;
+    color: var(--text);
+    text-shadow: 3px 3px 0 var(--shadow);
+}
+.new-tag {
+    align-self: flex-start;
+    background: var(--pink);
+    border: 3px solid var(--shadow);
+    padding: 2px 10px;
+    font-size: 11px;
+    animation: fadeUp 0.5s 0.6s ease-out both;
+}
+.char-name { font-size: 20px; line-height: 1.4; animation: fadeUp 0.6s 0.8s ease-out both; }
+.reveal-stars span {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 24px;
+    text-shadow: 3px 3px 0 var(--gold-dark), 0 0 10px var(--gold-light);
+    animation: starPop 0.35s ease-out both;
+}
+/* gwiazdki pojawiają się po kolei, jak w grze */
+.reveal-stars span:nth-child(1) { animation-delay: 1.2s; }
+.reveal-stars span:nth-child(2) { animation-delay: 1.45s; }
+.reveal-stars span:nth-child(3) { animation-delay: 1.7s; }
+.reveal-stars span:nth-child(4) { animation-delay: 1.95s; }
+.reveal-stars span:nth-child(5) { animation-delay: 2.2s; }
+@keyframes starPop {
+    from { transform: scale(3); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+.wishes {
+    font-size: 11px;
+    line-height: 2;
+    background: var(--wishes-bg);
+    border: 3px solid var(--border);
+    padding: 12px;
+    animation: fadeUp 0.8s 2.7s ease-out both;
+}
+#reveal .btn { align-self: flex-start; animation: fadeUp 0.6s 3.4s ease-out both; }
+@keyframes fadeUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+/* biały błysk, który gaśnie, gdy pojawia się karta (kontynuacja błysku z pulla) */
+#reveal::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--wish-flash);
+    pointer-events: none;
+    will-change: opacity;
+    animation: flashOut 0.8s ease-out both;
+}
+@keyframes flashOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* ===== PRZEJŚCIE PO WYGRANEJ (mini gra -> baner) ===== */
+#wipeCanvas {
+    position: fixed;          /* na cały ekran, nad ramkami, pod paskami CRT */
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 60;
+    pointer-events: none;     /* nie blokuje kliknięć */
+    image-rendering: pixelated;
+}
+/* ramka banera wskakuje schodkowo, jak w starej grze */
+.banner-enter { animation: bannerIn 0.5s steps(6) both; }
+@keyframes bannerIn {
+    from { transform: translateY(24px) scale(0.92); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+}
+/* mniej ruchu, jeśli system o to prosi (app.js robi wtedy samo szybkie przyciemnienie) */
+@media (prefers-reduced-motion: reduce) {
+    .banner-enter { animation: none; }
+}
+
+/* ===== MONIT "PC ONLY" (za małe okno / sam dotyk) =====
+   Próg (1024x640) jest w app.js: CONFIG.MIN_W / CONFIG.MIN_H. */
+.pc-only {
+    position: fixed;
+    inset: 0;
+    z-index: 80;              /* nad ramkami i kurtyną, pod paskami CRT */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow: auto;           /* na bardzo małym ekranie da się przewinąć */
+}
+.pc-only-box {
+    width: min(560px, 100%);
+    background: var(--panel);
+    color: var(--text);
+    border: 4px solid var(--border);
+    box-shadow:
+        0 0 0 4px var(--shadow),      /* czarny obrys jak przy innych ramkach */
+        8px 8px 0 4px var(--shadow);  /* twardy cień */
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    font-size: 11px;
+    line-height: 2;
+}
+.pc-only-box .title { font-size: 22px; }
+.pc-only-box b { color: var(--gold); }
+.pc-size { color: var(--text); }
+.pc-hint { font-size: 9px; opacity: 0.85; }
+/* gdy monit jest widoczny, chowamy ekrany strony (gwiazdki z bg.js i paski CRT zostają) */
+body.pc-blocked #app > * { visibility: hidden; }

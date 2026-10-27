@@ -1,0 +1,1673 @@
+/* =====================================================================
+   PULPIT (index.html) - stary Windows (95/98) w kolorach gry
+
+   Wszystkie kolory pulpitu są tutaj, w jednym miejscu.
+   Sekcja 1 to kopia wartości ze style.css (gry) - jeśli zmieniasz
+   kolory gry, zmień je też tutaj, żeby pulpit i gra pasowały.
+   Sekcję 1 (--bg, --star, --star-glow) czyta też bg.js, więc po
+   zmianie trzeba odświeżyć stronę (Ctrl+Shift+R).
+   ===================================================================== */
+
+:root {
+
+    /* ========== 1. OGÓLNE (te same wartości co w style.css) ========== */
+
+    --bg:              #2a2b6f;              /* nocne niebo pod gwiazdkami (tapeta) */
+    --star:            #ffffff;              /* gwiazdka */
+    --star-glow:       #e3e3e3;              /* jej poświata */
+    --text:            #f4f0e6;              /* zwykły jasny tekst */
+    --shadow:          #000000;              /* pixelowe cienie i czarne obrysy */
+    --border:          #f4f0e6;              /* jasna ramka (monit PC ONLY) */
+    --panel:           #f26dab;              /* różowe tło okienek (jak w grze) */
+    --gold:            #f6e9f2;              /* "złoto" gry: tytuły, przyciski */
+    --gold-dark:       #cfb2c6;              /* jego cień */
+    --pink-dark:       #8f1f69;              /* ciemny róż: cienie napisów */
+    --crt-lines:       rgba(0, 0, 0, 0.18);  /* paski CRT (alfa 0 = wyłączone) */
+
+    /* ========== 2. OKNA (ramka w stylu Win95) ========== */
+
+    --win-face:        #f26dab;              /* tło ramki okna i paska zadań */
+    --win-light:       #fbb3d3;              /* jasna krawędź (góra/lewo) */
+    --win-dark:        #8f1f69;              /* ciemna krawędź (dół/prawo) */
+    --win-outline:     #000000;              /* zewnętrzny obrys */
+    --win-text:        #f4f0e6;              /* tekst na ramce (menu, opisy) */
+    --win-shadow:      rgba(0, 0, 0, 0.45);  /* twardy cień pod oknem */
+
+    /* pasek tytułu */
+    --title-active:    linear-gradient(90deg, #1b1446, #a16ad9); /* aktywne okno: granat -> fiolet */
+    --title-inactive:  linear-gradient(90deg, #5d5480, #a99cc4); /* nieaktywne: wyblakłe */
+    --title-text:      #f6e9f2;              /* napis na aktywnym */
+    --title-text-off:  #ddd5ea;              /* napis na nieaktywnym */
+
+    /* wnętrze okna (Notatnik) */
+    --paper:           #fff7fb;              /* "kartka" */
+    --ink:             #2a2b6f;              /* tekst na kartce */
+    --select-bg:       #a16ad9;              /* zaznaczony tekst */
+    --file-text:       #2a2b6f;              /* podpis pliku w oknie folderu */
+    --file-sel-bg:     #a16ad9;              /* tło podpisu zaznaczonego pliku */
+    --file-sel-text:   #ffffff;              /* jego tekst */
+
+    /* ========== 3. PRZYCISKI (OK, Start, _ □ X, pasek zadań) ========== */
+
+    --btn-face:        #f6e9f2;              /* tło przycisku */
+    --btn-light:       #ffffff;              /* jasna krawędź */
+    --btn-dark:        #cfb2c6;              /* ciemna krawędź */
+    --btn-ink:         #8f1f69;              /* tekst i ikonki _ □ X */
+    --btn-pressed:     #e7d3e1;              /* wciśnięty (aktywne okno na pasku) */
+
+    /* ========== 4. PULPIT I MENU START ========== */
+
+    --icon-text:       #ffffff;              /* podpis ikony */
+    --icon-sel-bg:     #a16ad9;              /* tło podpisu zaznaczonej ikony */
+    --icon-sel-glow:   #f26dab;              /* pixelowy obrys zaznaczonej ikony */
+    --icon-focus:      #f6e9f2;              /* kropkowana ramka (fokus klawiatury) */
+    --menu-hover:      #1b1446;              /* podświetlona pozycja menu Start */
+    --menu-hover-text: #ffd36e;              /* jej tekst */
+    --start-side:      linear-gradient(0deg, #1b1446, #a16ad9); /* pionowy pasek w menu Start */
+    --start-side-text: #ffd36e;              /* napis na nim */
+    --tray-text:       #f4f0e6;              /* zegar */
+
+    /* ========== 5. BOOT, WYŁĄCZENIE, ŁADOWANIE ========== */
+
+    --boot-bg:         #1b1446;              /* tło ekranu startowego */
+    --boot-title:      #ffd36e;              /* napis May Your Birthday Wishes Come True! */
+    --boot-shadow:     #8f1f69;              /* kolorowy cień napisu */
+    --boot-block:      #f26dab;              /* zapełniony klocek paska postępu */
+    --boot-block-off:  rgba(255, 255, 255, 0.12); /* pusty klocek */
+    --off-bg:          #000000;              /* ekran "It's now safe..." */
+    --off-text:        #ffd36e;              /* jego napis */
+
+    /* ========== 6. FONT I ROZMIARY ========== */
+
+    --font:            "Press Start 2P", "Courier New", monospace;
+    --icon-size:       64px;                 /* ikona 32x32 x2 (całkowita skala = ostre pixele) */
+    --cell-w:          104px;                /* szerokość "kratki" ikony na pulpicie */
+    --cell-h:          104px;                /* wysokość kratki */
+    --taskbar-h:       40px;                 /* wysokość paska zadań */
+
+    /* ========== 7. PAINT (paint.js) ========== */
+    /* kolory rysunku (paleta, tort) są danymi w paint.js - tu tylko wygląd okna */
+
+    --paint-area:      #5d5480;              /* szare (śliwkowe) tło wokół płótna */
+    --paint-paper:     #ffffff;              /* tło płótna zanim JS je zamaluje */
+
+    /* ========== 8. MUZYKA (music.js) ========== */
+
+    --music-lcd:       #1b1446;              /* ciemny "wyświetlacz" odtwarzacza */
+    --music-lcd-text:  #ffd36e;              /* tytuł i czas na wyświetlaczu */
+    --music-lcd-dim:   #b98cff;              /* wykonawca, "/ całość" */
+    --music-bar-top:   #f26dab;              /* equalizer - góra słupka */
+    --music-bar-mid:   #b98cff;              /* equalizer - środek */
+    --music-bar-low:   #5fe1ff;              /* equalizer - dół */
+    --music-fill:      #a16ad9;              /* wypełniona część suwaka */
+    --music-track:     #fff7fb;              /* pusta część suwaka */
+    --music-error:     #8f1f69;              /* status "File not found" */
+    --music-list:      #fff7fb;              /* tło listy utworów */
+    --music-list-ink:  #1b1446;              /* tytuły na liście */
+    --music-now:       #a16ad9;              /* podświetlenie grającego utworu */
+    --music-missing:   #b07aa0;              /* utwór bez pliku ("file missing") */
+    --gate-dim:        rgba(27, 20, 70, 0.7); /* przyciemnienie pulpitu pod okienkiem "Sound" */
+
+    /* ========== 9. PODGLĄD OBRAZKÓW (My Computer) ========== */
+
+    --viewer-bg:       #ffffff;              /* tło pod obrazkiem w podglądzie */
+
+    /* ========== 10. PASJANS (solitaire.js) ========== */
+    /* portrety i rewers są obrazkiem (assets/solitaire/portraits.png) - tu reszta kart i stół */
+
+    --sol-table:       #3b1d5e;              /* "sukno" stołu (głęboka śliwka zamiast zieleni) */
+    --sol-slot:        #6b4a99;              /* ramka i znak pustego miejsca na kartę */
+    --card-face:       #fff7fb;              /* kremowa twarz karty */
+    --card-edge:       #1b1446;              /* pixelowa ramka karty */
+    --card-art-edge:   #2a2b6f;              /* ramka wokół portretu */
+    --card-red:        #d81b60;              /* kiery i kara (ranga + symbol) */
+    --card-black:      #2a2b6f;              /* trefle i piki (granat zamiast czerni) */
+
+    /* ========== 11. PRIMO-MAN (pacman.js) ========== */
+    /* sprite'y są obrazkiem (assets/pacman/sprites.png) - tu labirynt i napisy */
+
+    --pac-bg:          #120c2e;              /* tło labiryntu (nocne niebo) */
+    --pac-wall:        #2a1f5e;              /* wypełnienie ścian */
+    --pac-wall-line:   #a16ad9;              /* jasna krawędź ścian */
+    --pac-wall-flash:  #fff7fb;              /* krawędź mrugająca po zebraniu wszystkich primogemów */
+    --pac-door:        #f7a8bd;              /* drzwiczki domku szlamów */
+    --pac-points:      #ffd36e;              /* punkty za zjedzony szlam (200, 400...) */
+    --pac-hud-bg:      #1b1446;              /* pasek z wynikiem nad planszą */
+    --pac-hud-text:    #f6e9f2;              /* jego tekst */
+    --pac-msg:         #ffd36e;              /* napisy READY!, PAUSED, GAME OVER */
+    --pac-msg-shadow:  #8f1f69;              /* ich pixelowy cień */
+    --pac-msg-bg:      rgba(18, 12, 46, 0.8); /* tło pod napisem końca gry */
+
+    /* ========== 12. SIGIL SNAKE (snake.js) ========== */
+    /* skrzynki, pieczęć, kotek i ołtarz są obrazkami (assets/snake/) - tu reszta */
+
+    --snk-board-a:     #3f7a4a;              /* trawa w szachownicę (jasne pole) */
+    --snk-board-b:     #478a52;              /* ... i ciemniejsze */
+    --snk-body:        #b48be8;              /* wężyk (liliowy) */
+    --snk-body-light:  #e3cdfc;              /* kropki na grzbiecie i błysk na główce */
+    --snk-body-dark:   #3a2a55;              /* obrys wężyka */
+    --snk-eye:         #ffffff;              /* białka oczu */
+    --snk-pupil:       #1b1446;              /* źrenice (i oczka X po zderzeniu) */
+    --snk-cheek:       #f7a8bd;              /* rumieńce */
+    --snk-tongue:      #e2525c;              /* języczek */
+    --snk-plus:        #ffd36e;              /* napis +1 nad otwartą skrzynką */
+    --snk-hud-bg:      #1b1446;              /* pasek z pieczęciami nad planszą */
+    --snk-hud-text:    #f6e9f2;              /* jego tekst */
+    --snk-tok-full:    #ffd36e;              /* licznik, gdy pieczęci starczy na ofiarę */
+    --snk-msg:         #ffd36e;              /* napisy na planszy (READY!, GAME OVER...) */
+    --snk-msg-shadow:  #3a2a55;              /* ich pixelowy cień */
+    --snk-msg-bg:      rgba(27, 20, 70, 0.75); /* tło pod napisem */
+    --snk-scene-side:  #1a0c0a;              /* tło sceny ołtarza pod panelem */
+    --snk-glow:        rgba(255, 170, 60, 0.75); /* blask tarczy i run (środek) */
+    --snk-glow-out:    rgba(255, 120, 30, 0); /* ... wygasa na brzegach */
+    --snk-ember:       #ffcf6b;              /* iskry nad płomykiem */
+    --snk-flame-core:  #fff3b0;              /* płomyk: środek */
+    --snk-flame-mid:   #ffb03a;              /* płomyk: środek-brzeg */
+    --snk-flame-edge:  #e2522c;              /* płomyk: brzeg */
+    --snk-flash:       #fff3d6;              /* błysk po złożeniu ofiary */
+    --snk-panel-bg:    rgba(38, 22, 20, 0.9); /* panel ołtarza (jak w Genshinie) */
+    --snk-panel-text:  #ece5d8;              /* kremowy tekst panelu */
+    --snk-panel-dim:   #bfae96;              /* przygaszony tekst (podtytuły) */
+    --snk-panel-line:  rgba(236, 229, 216, 0.3); /* cienkie linie przy nagłówkach */
+    --snk-lvl-bg:      #ece5d8;              /* romb z poziomem pod emblematem */
+    --snk-lvl-text:    #3b4255;              /* liczba w rombie */
+    --snk-lvl-edge:    #c9a46a;              /* złota obwódka (romb, miniatury kotków) */
+    --snk-slot-bg:     linear-gradient(180deg, #6b4b8f, #a77fc9); /* kafelek nagrody (fiolet 4*) */
+    --snk-slot-foot:   #ece5d8;              /* pasek z liczbą pod nagrodą */
+    --snk-slot-text:   #3b4255;              /* liczba nagrody */
+    --snk-req-ic-bg:   #9c3a34;              /* kwadracik pod ikoną pieczęci */
+    --snk-req-ok:      #ece5d8;              /* licznik 30/30 (wystarczy) */
+    --snk-req-short:   #ff8a7a;              /* licznik, gdy brakuje pieczęci */
+    --snk-x-bg:        #ece5d8;              /* okrągły przycisk zamknięcia panelu */
+    --snk-x-text:      #3b4255;              /* jego krzyżyk */
+    --snk-pill-bg:     #ece5d8;              /* guziki Rewards / Offer (kremowe pigułki) */
+    --snk-pill-hover:  #fffaf0;              /* ... po najechaniu */
+    --snk-pill-text:   #3b4255;              /* ich tekst */
+    --snk-pill-ic-bg:  #2b2f3a;              /* czarne kółko ikonki w guziku */
+    --snk-pill-ic:     #ffcb4a;              /* żółta ikonka (pierścień / strzałka w górę) */
+    --snk-reveal-dim:  rgba(0, 0, 0, 0.5);   /* przyciemnienie pod kartą z kotkiem */
+    --snk-frame-bg:    #1b1446;              /* tło ramki z kotkiem */
+    --snk-frame-gold:  #f2c14e;              /* złota pixelowa ramka kotka */
+
+    /* ========== 13. SLIME INVADERS (invaders.js) ========== */
+    /* szlamy, Citlali i pociski są obrazkiem (assets/invaders/sprites.png) - tu tło, tarcze i napisy */
+
+    --inv-sky-top:     #0d0a26;              /* nocne niebo u góry ... */
+    --inv-sky-bottom:  #3a1f5e;              /* ... i fioletowa łuna przy ziemi */
+    --inv-star:        #f6e9f2;              /* migoczące gwiazdki */
+    --inv-ground:      #2a1f3e;              /* ziemia pod Citlali */
+    --inv-ground-top:  #a16ad9;              /* jej jasna krawędź */
+    --inv-ice:         #8fd8f2;              /* lodowe tarcze */
+    --inv-ice-light:   #e8fbff;              /* ich oszroniony wierzch */
+    --inv-ice-dark:    #4fa3d1;              /* brzegi i spoiny lodowych cegiełek */
+    --inv-text:        #f6e9f2;              /* tekst na ekranie tytułowym */
+    --inv-text-dim:    #c49be0;              /* przygaszony podtytuł */
+    --inv-points:      #ffd36e;              /* punkty za UFO, tytuł */
+    --inv-hud-bg:      #1b1446;              /* pasek z wynikiem */
+    --inv-hud-text:    #f6e9f2;              /* jego tekst */
+    --inv-msg:         #ffd36e;              /* napisy WAVE 1, PAUSED, GAME OVER */
+    --inv-msg-shadow:  #8f1f69;              /* ich pixelowy cień */
+    --inv-msg-bg:      rgba(13, 10, 38, 0.8); /* tło pod napisem */
+
+    /* ========== 14. CITLALI RUN (runner.js) ========== */
+    /* Citlali, szlam, totem i primogemy są obrazkiem (assets/run/sprites.png); */
+    /* kolory świątyni muszą być w formacie #rrggbb (JS miesza je z mgłą)        */
+
+    --run-sky-top:     #6b2a5a;              /* niebo u góry (fiolet) ... */
+    --run-sky-mid:     #e2603a;              /* ... pomarańcz ... */
+    --run-sky-low:     #ffc46b;              /* ... i złoto przy horyzoncie */
+    --run-sun:         #fff0b8;              /* słońce */
+    --run-far:         #b8503a;              /* dalekie piramidy */
+    --run-far-dark:    #8a3a32;              /* bliższe piramidy */
+    --run-jungle:      #3f5a2a;              /* korony drzew przy horyzoncie */
+    --run-jungle-dark: #23331c;              /* dżungla niżej */
+    --run-abyss:       #160a0c;              /* przepaść pod drogą */
+    --run-fog:         #f2a35a;              /* mgła w oddali (kolor horyzontu) */
+    --run-slab-a:      #d29a55;              /* kamienne płyty drogi (jasne) ... */
+    --run-slab-b:      #bd8344;              /* ... i ciemniejsze */
+    --run-lane:        #9a6234;              /* rowki między pasami */
+    --run-trim:        #f2c14e;              /* złote brzegi drogi */
+    --run-wall:        #8a3a2a;              /* murki wzdłuż drogi */
+    --run-wall-top:    #c25a3a;              /* ich wierzch */
+    --run-block:       #a8553a;              /* murki do skakania, łuki, słupki */
+    --run-block-dark:  #6b3524;              /* ... ich boki */
+    --run-block-top:   #d2774a;              /* ... i wierzch */
+    --run-gold:        #f2c14e;              /* złote pasy na kamieniu */
+    --run-jade:        #4fd0b8;              /* turkusowe kamyki (ozdoby) */
+    --run-cliff:       #4a2018;              /* ściana przepaści */
+    --run-fire:        #ff7a2a;              /* płomyki na słupkach */
+    --run-fire-core:   #fff0b8;              /* ... ich środek */
+    --run-shadow:      rgba(40, 10, 10, 0.35); /* cień pod Citlali */
+    --run-text:        #fff3e0;              /* tekst na płótnie */
+    --run-points:      #ffd36e;              /* wyróżnienia */
+    --run-hud-bg:      #2a120c;              /* pasek z wynikiem */
+    --run-hud-text:    #fff3e0;              /* jego tekst */
+    --run-msg:         #ffd36e;              /* napisy (tytuł, GAME OVER) */
+    --run-msg-shadow:  #6b1f1a;              /* ich pixelowy cień */
+    --run-msg-bg:      rgba(42, 18, 12, 0.82); /* tło pod napisem */
+
+    /* ========== 15. HIGH SCORES (scores.js, dane w leaderboard.js) ========== */
+
+    --lb-bg:           #1b1446;              /* tło tabeli (granat jak w arcade) */
+    --lb-title:        #ffd36e;              /* napis HIGH SCORES */
+    --lb-title-shadow: #8f1f69;              /* jego pixelowy cień */
+    --lb-game:         #f26dab;              /* nazwa gry */
+    --lb-text:         #f4f0e6;              /* imię i miejsce */
+    --lb-score:        #4fd0b8;              /* wynik */
+    --lb-line:         #3a2f7a;              /* kropkowana linia między wierszami */
+    --lb-gold:         #ffd36e;              /* medal za 1. miejsce */
+    --lb-silver:       #d6d6e6;              /* ... za 2. */
+    --lb-bronze:       #e0915a;              /* ... za 3. */
+    --lb-medal-ink:    #2a2b6f;              /* cyfra na medalu */
+    --lb-spark:        #fff7c8;              /* iskierki wokół pucharu */
+    --lb-note:         #f6e9f2;              /* tekst o Discordzie */
+}
+
+/* ===================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 8px;
+    line-height: 1.6;
+    user-select: none;          /* blokada zaznaczania tekstu */
+    -webkit-user-select: none;
+    overflow: hidden;           /* bez pasków przewijania */
+    height: 100vh;
+}
+body.busy, body.busy * { cursor: progress !important; } /* klepsydra przy ładowaniu gry */
+
+img {
+    -webkit-user-drag: none;
+    image-rendering: pixelated;  /* ostre pixele po powiększeniu */
+}
+button { font-family: var(--font); }
+.hidden { display: none !important; }
+
+/* gwiaździste tło (bg.js) */
+#bgStars {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: block;
+}
+
+/* paski CRT na całym ekranie (jak w grze) */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;     /* nie blokuje kliknięć */
+    will-change: transform;   /* własna warstwa GPU */
+    transform: translateZ(0);
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 2px,
+        var(--crt-lines) 3px
+    );
+    z-index: 10000;
+}
+
+/* ===== RAMKI 3D (Win95: jasno u góry/z lewej, ciemno u dołu/z prawej) ===== */
+.raised {
+    box-shadow:
+        inset -2px -2px 0 var(--win-outline),
+        inset 2px 2px 0 var(--win-light),
+        inset -4px -4px 0 var(--win-dark);
+}
+.sunken {
+    box-shadow:
+        inset 2px 2px 0 var(--win-dark),
+        inset -2px -2px 0 var(--win-light),
+        inset 4px 4px 0 var(--win-outline);
+}
+
+/* ===== PRZYCISKI ===== */
+.win-btn {
+    font-size: 8px;
+    color: var(--btn-ink);
+    background: var(--btn-face);
+    border: 0;
+    padding: 6px 12px;
+    cursor: pointer;
+    box-shadow:
+        inset -2px -2px 0 var(--win-outline),
+        inset 2px 2px 0 var(--btn-light),
+        inset -4px -4px 0 var(--btn-dark);
+}
+.win-btn:active, .win-btn.pressed {
+    background: var(--btn-pressed);
+    box-shadow:
+        inset 2px 2px 0 var(--win-outline),
+        inset -2px -2px 0 var(--btn-light),
+        inset 4px 4px 0 var(--btn-dark);
+    padding: 8px 10px 4px 14px;   /* napis "wciska się" o 2 px */
+}
+.win-btn:focus-visible { outline: 2px dotted var(--btn-ink); outline-offset: -8px; }
+
+/* ===== IKONY NA PULPICIE ===== */
+#desktop {
+    position: fixed;
+    inset: 0 0 var(--taskbar-h) 0;
+}
+#icons {
+    position: absolute;
+    inset: 12px;
+    display: grid;
+    grid-auto-flow: column;                           /* kolumnami od lewej, jak w Windowsie */
+    grid-template-rows: repeat(auto-fill, var(--cell-h));
+    grid-auto-columns: var(--cell-w);
+    gap: 4px;
+    align-content: start;
+    justify-content: start;
+}
+.icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 2px;
+    background: none;
+    border: 0;
+    outline: none;
+    color: var(--icon-text);
+    font-size: 8px;
+    line-height: 1.6;
+    cursor: default;
+}
+.icon img {
+    width: var(--icon-size);
+    height: var(--icon-size);
+}
+.icon span {
+    padding: 2px 3px;
+    text-align: center;
+    max-width: 100%;
+    text-shadow: 1px 1px 0 var(--shadow), 2px 2px 0 var(--shadow);
+    overflow-wrap: anywhere;
+}
+/* zaznaczona ikona: różowy pixelowy obrys obrazka i fioletowe tło podpisu */
+.icon.selected img {
+    filter:
+        drop-shadow(2px 0 0 var(--icon-sel-glow))
+        drop-shadow(-2px 0 0 var(--icon-sel-glow))
+        drop-shadow(0 2px 0 var(--icon-sel-glow))
+        drop-shadow(0 -2px 0 var(--icon-sel-glow));
+}
+.icon.selected span { background: var(--icon-sel-bg); }
+.icon:focus-visible span { outline: 2px dotted var(--icon-focus); }
+
+/* ===== OKNA ===== */
+.window {
+    position: fixed;
+    left: 0;
+    top: 0;                    /* pozycję daje transform (desktop.js) - szybkie przesuwanie */
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    background: var(--win-face);
+    color: var(--win-text);
+    filter: drop-shadow(6px 6px 0 var(--win-shadow)); /* twardy cień jak ramki w grze */
+}
+.window.max { filter: none; }
+.window.min { display: none; }
+.window.dragging { will-change: transform; }
+.window.dragging iframe { pointer-events: none; } /* iframe nie łapie myszki przy przeciąganiu */
+
+.titlebar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 24px;
+    padding: 0 3px 0 4px;
+    background: var(--title-inactive);
+    color: var(--title-text-off);
+    flex-shrink: 0;
+    touch-action: none;
+}
+.window.active .titlebar {
+    background: var(--title-active);
+    color: var(--title-text);
+}
+.titlebar img { width: 16px; height: 16px; flex-shrink: 0; }
+.titlebar .title-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 0 var(--shadow);
+}
+.title-btns { display: flex; gap: 2px; }
+.title-btns .win-btn {
+    width: 22px;
+    height: 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.title-btns .win-btn:active { padding: 2px 0 0 2px; }
+.title-btns .close-btn { margin-left: 4px; }
+.title-btns .win-btn:disabled { cursor: default; opacity: 0.45; }
+.title-btns svg { display: block; fill: currentColor; shape-rendering: crispEdges; }
+
+.win-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+}
+
+/* menu Notatnika (atrapa) */
+.menubar { display: flex; gap: 2px; padding: 2px 0 4px; }
+.menubar span { padding: 4px 8px; }
+.menubar span:hover,
+.menubar span.open { background: var(--menu-hover); color: var(--menu-hover-text); }
+
+/* pole tekstowe Notatnika */
+.notepad-text {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    resize: none;
+    border: 0;
+    outline: none;
+    padding: 12px 14px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 10px;
+    line-height: 2;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: text;
+}
+.notepad-text::selection,
+.notepad-text *::selection { background: var(--select-bg); color: var(--paper); }
+.notepad-text:focus { outline: none; }
+.note-line { min-height: 1em; }
+.note-img { margin: 8px 0 4px; }
+.note-img img { display: block; max-width: none; image-rendering: pixelated; box-shadow: 4px 4px 0 var(--win-dark); }
+.note-missing { color: var(--music-error); }
+.note-palette { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 10px 0 4px; }
+.note-swatch { display: inline-flex; align-items: center; gap: 6px; font-size: 8px; }
+.note-swatch i {
+    width: 16px;
+    height: 16px;
+    box-shadow: 0 0 0 2px var(--ink);
+}
+.note-swatch b { font-weight: normal; }
+
+/* pixelowy pasek przewijania (Chrome/Edge) */
+.notepad-text::-webkit-scrollbar { width: 16px; }
+.notepad-text::-webkit-scrollbar-track { background: var(--btn-pressed); }
+.notepad-text::-webkit-scrollbar-thumb {
+    background: var(--btn-face);
+    box-shadow:
+        inset -2px -2px 0 var(--win-outline),
+        inset 2px 2px 0 var(--btn-light),
+        inset -4px -4px 0 var(--btn-dark);
+}
+
+/* okienko z komunikatem (atrapy aplikacji, Shut Down, ładowanie) */
+.msg-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 18px 16px 10px;
+}
+.msg-row { display: flex; align-items: center; gap: 16px; }
+.msg-row img { width: 32px; height: 32px; flex-shrink: 0; }
+.msg-row p { font-size: 8px; line-height: 2; }
+.msg-btns { display: flex; justify-content: center; gap: 12px; }
+.msg-btns .win-btn { min-width: 96px; }
+
+/* pasek postępu przy ładowaniu gry (klocki jak w Windowsie) */
+.progress {
+    height: 22px;
+    padding: 4px;
+    background: var(--paper);
+}
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--boot-block) 0 12px,
+        transparent 12px 16px
+    );
+}
+
+/* okno gry: iframe na całe wnętrze */
+.game-frame {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    border: 0;
+    display: block;
+    background: var(--bg);
+}
+
+/* ===== PASEK ZADAŃ ===== */
+#taskbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--taskbar-h);
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 4px 2px;
+    background: var(--win-face);
+    box-shadow: inset 0 2px 0 var(--win-light), 0 -2px 0 var(--win-outline);
+}
+.start-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    font-size: 10px;
+    flex-shrink: 0;
+}
+.start-btn img { width: 16px; height: 16px; }
+.task-buttons {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 4px;
+}
+.task-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    width: 180px;
+    min-width: 0;
+    text-align: left;
+}
+.task-btn img { width: 16px; height: 16px; flex-shrink: 0; }
+.task-btn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tray {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    color: var(--tray-text);
+    font-size: 8px;
+    box-shadow:
+        inset 2px 2px 0 var(--win-dark),
+        inset -2px -2px 0 var(--win-light);
+    text-shadow: 1px 1px 0 var(--shadow);
+}
+
+/* ===== MENU START ===== */
+.start-menu {
+    position: fixed;
+    left: 4px;
+    bottom: calc(var(--taskbar-h) - 2px);
+    z-index: 5001;
+    display: flex;
+    min-width: 260px;
+    padding: 6px;
+    background: var(--win-face);
+    box-shadow:
+        inset -2px -2px 0 var(--win-outline),
+        inset 2px 2px 0 var(--win-light),
+        inset -4px -4px 0 var(--win-dark),
+        6px 6px 0 var(--win-shadow);
+}
+.start-side {
+    width: 30px;
+    background: var(--start-side);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 8px 0;
+    flex-shrink: 0;
+}
+.start-side span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);        /* czytane od dołu do góry, jak w Win95 */
+    color: var(--start-side-text);
+    font-size: 8px;                   /* długa nazwa systemu musi się zmieścić na pasku */
+    white-space: nowrap;
+    text-shadow: 2px 2px 0 var(--shadow);
+}
+.start-list { list-style: none; flex: 1; padding-left: 4px; }
+.start-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px 8px 8px;
+    color: var(--win-text);
+    text-shadow: 1px 1px 0 var(--pink-dark);
+    cursor: default;
+}
+.start-list li img { width: 32px; height: 32px; }
+.start-list li:hover, .start-list li:focus-visible {
+    background: var(--menu-hover);
+    color: var(--menu-hover-text);
+    outline: none;
+}
+.start-list .sep {
+    height: 0;
+    padding: 0;
+    margin: 4px 2px;
+    border-top: 2px solid var(--win-dark);
+    border-bottom: 2px solid var(--win-light);
+}
+
+/* ===== EKRAN STARTOWY (BOOT) ===== */
+.boot {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    background: var(--boot-bg);
+    cursor: pointer;
+}
+.boot-logo-img { width: 96px; height: 96px; }    /* primogem 32x32 x3 */
+.boot-title {
+    font-size: 24px;
+    font-weight: normal;
+    color: var(--boot-title);
+    text-shadow: 4px 4px 0 var(--boot-shadow), 8px 8px 0 var(--shadow);
+    max-width: 90vw;
+    text-align: center;
+    line-height: 1.6;                 /* długi napis zawija się ładnie w węższym oknie */
+}
+.boot-bar { display: flex; gap: 6px; }
+.boot-bar i { width: 18px; height: 18px; background: var(--boot-block-off); }
+.boot-bar i.on { background: var(--boot-block); }
+.boot-hint, .off-hint {
+    font-size: 8px;
+    opacity: 0.7;
+    animation: blink 1s steps(1) infinite;   /* miga jak "INSERT COIN" */
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ===== EKRAN "IT'S NOW SAFE TO TURN OFF" ===== */
+.off-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    background: var(--off-bg);
+    color: var(--off-text);
+    font-size: 16px;
+    line-height: 2;
+    text-align: center;
+    cursor: pointer;
+}
+.off-hint { color: var(--text); }
+
+@media (prefers-reduced-motion: reduce) {
+    .boot-hint, .off-hint { animation: none; }
+}
+
+/* ===== MONIT "PC ONLY" (ten sam wygląd co w grze) =====
+   Próg (1024x640) jest w desktop.js: DESK.MIN_W / DESK.MIN_H. */
+.pc-only {
+    position: fixed;
+    inset: 0;
+    z-index: 9500;            /* nad wszystkim, pod paskami CRT */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow: auto;
+    font-size: 12px;
+    line-height: 1.8;
+}
+.pc-only-box {
+    width: min(560px, 100%);
+    background: var(--panel);
+    color: var(--text);
+    border: 4px solid var(--border);
+    box-shadow:
+        0 0 0 4px var(--shadow),      /* czarny obrys jak przy ramkach w grze */
+        8px 8px 0 4px var(--shadow);  /* twardy cień */
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    font-size: 11px;
+    line-height: 2;
+}
+.pc-only-box .title {
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--gold);
+    text-shadow: 4px 4px 0 var(--gold-dark), 8px 8px 0 var(--shadow);
+}
+.pc-only-box b { color: var(--gold); }
+.pc-size { color: var(--text); }
+.pc-hint { font-size: 9px; opacity: 0.85; }
+/* gdy monit jest widoczny, chowamy pulpit (gwiazdki z bg.js i paski CRT zostają) */
+body.pc-blocked #desktop,
+body.pc-blocked #windows,
+body.pc-blocked #taskbar,
+body.pc-blocked #startMenu,
+body.pc-blocked #boot { visibility: hidden; }
+
+/* zmaksymalizowane okno: cieńsza ramka, żeby gra (808x608) weszła już przy 1024x640 */
+.window.max { padding: 2px; }
+.window.max .win-body { margin-top: 2px; }
+
+/* ===== OKNO FOLDERU (Eksplorator, np. Kosz) ===== */
+.folder-view {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 14px;
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--cell-w));
+    grid-auto-rows: var(--cell-h);
+    gap: 4px;
+    align-content: start;
+}
+.icon.file { color: var(--file-text); }
+.icon.file span { text-shadow: none; }
+.icon.file.selected span { background: var(--file-sel-bg); color: var(--file-sel-text); }
+.statusbar {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+.statusbar span {
+    flex: 1;
+    min-height: 22px;
+    padding: 6px 10px 4px;
+    box-shadow:
+        inset 2px 2px 0 var(--win-dark),
+        inset -2px -2px 0 var(--win-light);
+}
+
+/* ===== MINI PAINT (paint.js) ===== */
+.paint { display: contents; }
+.paint-main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    gap: 6px;
+}
+.paint-tools {
+    display: grid;
+    grid-template-columns: repeat(2, 30px);
+    grid-auto-rows: 30px;
+    gap: 2px;
+    align-content: start;
+}
+.paint-tool { padding: 0; display: flex; align-items: center; justify-content: center; }
+.paint-tool.pressed, .paint-tool:active { padding: 2px 0 0 2px; }
+.paint-tool svg { display: block; fill: currentColor; shape-rendering: crispEdges; }
+.paint-area {
+    isolation: isolate;         /* własny kontekst warstw - rozwinięte menu zawsze nad płótnem */
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    display: grid;
+    place-items: center;
+    padding: 6px;
+    background: var(--paint-area);
+}
+.paint-canvas {
+    display: block;
+    background: var(--paint-paper);
+    image-rendering: pixelated;          /* każdy pixel płótna = ostry kwadrat */
+    cursor: crosshair;
+    outline: none;
+    box-shadow: 0 0 0 2px var(--win-outline);
+}
+.paint-canvas[data-tool="fill"],
+.paint-canvas[data-tool="picker"] { cursor: cell; }
+.paint-bottom {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+/* klasyczne nachodzące na siebie kwadraty: kolor główny i kolor tła */
+.paint-colors {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: var(--btn-face);
+}
+.paint-pri, .paint-sec {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 0 0 2px var(--win-outline);
+}
+.paint-pri { left: 8px; top: 8px; }
+.paint-sec { left: 18px; top: 18px; }
+.paint-swatches {
+    display: grid;
+    grid-template-columns: repeat(10, 20px);
+    grid-auto-rows: 20px;
+    gap: 2px;
+}
+.paint-swatch {
+    border: 0;
+    cursor: pointer;
+    box-shadow:
+        inset 2px 2px 0 var(--win-dark),
+        inset -2px -2px 0 var(--win-light);
+}
+.paint-pos { flex: 0 0 140px; }
+
+/* rozwijane menu (File / Edit / Image) */
+.menu-pop {
+    position: absolute;
+    z-index: 1000;              /* nad treścią okna (karty, płótno); treść ma własny kontekst warstw */
+    min-width: 200px;
+    padding: 6px;
+    background: var(--win-face);
+}
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 6px 10px;
+    cursor: default;
+}
+.menu-item:hover { background: var(--menu-hover); color: var(--menu-hover-text); }
+.menu-key { opacity: 0.8; }
+.menu-sep {
+    margin: 4px 2px;
+    border-top: 2px solid var(--win-dark);
+    border-bottom: 2px solid var(--win-light);
+}
+
+/* ===== ODTWARZACZ MUZYKI (music.js) ===== */
+.music {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 6px 4px 0;
+    min-height: 0;
+}
+.window.max .music { width: 100%; max-width: 760px; margin: 0 auto; justify-content: center; }
+.music-top { display: flex; gap: 10px; }
+.music-cover {
+    width: 160px;                        /* okładka 80x80 x2 */
+    height: 160px;
+    flex-shrink: 0;
+    image-rendering: pixelated;
+    background: var(--music-lcd);
+    box-shadow: 0 0 0 2px var(--win-outline), 4px 4px 0 2px var(--win-dark);
+    margin: 2px;
+}
+.music-lcd {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 12px 10px;
+    background: var(--music-lcd);
+    color: var(--music-lcd-text);
+}
+.music-title { font-size: 8px; line-height: 1.8; text-shadow: 2px 2px 0 var(--shadow); }
+.music-artist { font-size: 8px; color: var(--music-lcd-dim); }
+.music-time-row { display: flex; align-items: baseline; gap: 10px; margin-top: auto; }
+.music-time { font-size: 16px; text-shadow: 2px 2px 0 var(--boot-shadow); }
+.music-total { font-size: 8px; color: var(--music-lcd-dim); }
+.music-vis {
+    width: 96px;                         /* 48x16 x2 */
+    height: 32px;
+    image-rendering: pixelated;
+}
+
+/* pixelowy suwak: pasek postępu i głośność (--v = 0..1 ustawia JS) */
+.music-slider {
+    --thumb-w: 14px;
+    position: relative;
+    height: 18px;
+    background: var(--music-track);
+    cursor: pointer;
+    touch-action: none;
+    outline: none;
+}
+.music-slider-fill {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    bottom: 4px;
+    width: calc((100% - 8px) * var(--v, 0));
+    background: var(--music-fill);
+}
+.music-slider-thumb {
+    position: absolute;
+    top: -3px;
+    width: var(--thumb-w);
+    height: 24px;
+    left: calc((100% - var(--thumb-w)) * var(--v, 0));
+    background: var(--btn-face);
+}
+.music-slider:focus-visible .music-slider-thumb { outline: 2px dotted var(--btn-ink); outline-offset: -5px; }
+.music-slider.disabled { cursor: default; }
+.music-slider.disabled .music-slider-thumb { visibility: hidden; }
+.music-seek { margin: 4px 2px 0; }
+
+.music-controls { display: flex; gap: 4px; align-items: center; }
+.music-btn {
+    width: 40px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.music-btn.pressed, .music-btn:active { padding: 2px 0 0 2px; }
+.music-btn svg { display: block; fill: currentColor; shape-rendering: crispEdges; }
+.music-btn:disabled { opacity: 0.45; cursor: default; }
+.music-gap { flex: 1; }
+.music-vol-row { display: flex; align-items: center; gap: 12px; padding: 0 2px; }
+.music-vol-row .music-slider { flex: 1; }
+.music-vol-label, .music-vol-val { font-size: 8px; }
+.music-vol-val { width: 40px; text-align: right; }
+.music .statusbar { margin-top: auto; }
+
+/* przycisk powtarzania: mały dopisek "1" (ten utwór) / "ALL" (cała lista) */
+.music-loop { position: relative; }
+.music-loop-tag {
+    position: absolute;
+    right: 2px;
+    bottom: 1px;
+    font-size: 6px;
+    line-height: 1;
+}
+
+/* lista utworów (playlista) */
+.music-list {
+    display: flex;
+    flex-direction: column;
+    padding: 2px;
+    background: var(--music-list);
+}
+.music-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 5px 8px;
+    border: 0;
+    background: transparent;
+    color: var(--music-list-ink);
+    font: inherit;
+    font-size: 8px;
+    text-align: left;
+    cursor: pointer;
+}
+.music-row:focus-visible { outline: 2px dotted var(--music-list-ink); outline-offset: -2px; }
+.music-row-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.music-row-len { flex-shrink: 0; }
+.music-row.now { background: var(--music-now); color: white; }
+.music-row.missing { color: var(--music-missing); }
+.music-row.now.missing { color: white; }
+.statusbar.music-error span { color: var(--music-error); }
+
+/* głośnik w zasobniku i okienko głośności */
+.tray { gap: 10px; }
+.tray-btn {
+    display: flex;
+    padding: 2px;
+    border: 0;
+    background: none;
+    color: var(--tray-text);
+    cursor: pointer;
+}
+.tray-btn svg { display: block; fill: currentColor; filter: drop-shadow(1px 1px 0 var(--shadow)); }
+.tray-btn:focus-visible { outline: 2px dotted var(--tray-text); }
+.vol-pop {
+    position: fixed;
+    right: 8px;
+    bottom: calc(var(--taskbar-h) + 4px);
+    z-index: 5001;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 14px 12px;
+    background: var(--win-face);
+    color: var(--win-text);
+    font-size: 8px;
+    filter: drop-shadow(4px 4px 0 var(--win-shadow));
+}
+.vol-pop-val { text-align: center; }
+
+/* okienko "Sound" po bootowaniu (nie da się go pominąć) */
+.sound-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 8500;                        /* nad pulpitem i paskiem zadań, pod bootem i PC ONLY */
+    display: grid;
+    place-items: center;
+    background: var(--gate-dim);
+}
+.sound-box { position: static; min-width: 420px; }
+.sound-ok { min-width: 180px; display: inline-flex; align-items: center; gap: 10px; }
+.sound-ok svg { fill: currentColor; }
+body.pc-blocked .sound-gate { visibility: hidden; }
+
+/* ===== PODGLĄD OBRAZKA (openImage) ===== */
+.viewer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 6px 8px;
+}
+.viewer-frame { padding: 10px; background: var(--viewer-bg); }
+.viewer-img { display: block; image-rendering: pixelated; }
+.viewer-caption {
+    max-width: 340px;
+    font-size: 8px;
+    line-height: 2;
+    text-align: center;
+}
+
+/* ===================================================================== */
+/*  PASJANS (solitaire.js) - karty to <div>y przesuwane transformem;     */
+/*  --s = całkowita skala kart (1, 2, 3) ustawiana przez JS              */
+/* ===================================================================== */
+
+.sol { display: flex; flex-direction: column; height: 100%; }
+.sol-table {
+    --s: 2;
+    position: relative;
+    isolation: isolate;         /* z-index kart (też przeciąganych) zostaje w stole, pod menu */
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    background: var(--sol-table);
+    touch-action: none;
+    user-select: none;
+    outline: none;
+}
+.sol-card,
+.sol-slot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(var(--s) * 56px);
+    height: calc(var(--s) * 80px);
+    /* ścięte narożniki o 1 pixel karty = pixelowe "zaokrąglenie" */
+    clip-path: polygon(
+        calc(var(--s) * 1px) 0, calc(100% - var(--s) * 1px) 0,
+        100% calc(var(--s) * 1px), 100% calc(100% - var(--s) * 1px),
+        calc(100% - var(--s) * 1px) 100%, calc(var(--s) * 1px) 100%,
+        0 calc(100% - var(--s) * 1px), 0 calc(var(--s) * 1px));
+}
+.sol-slot {
+    display: grid;
+    place-items: center;
+    border: calc(var(--s) * 1px) solid var(--sol-slot);
+    color: var(--sol-slot);
+    font: calc(var(--s) * 16px) / 1 var(--font);
+}
+.sol-ring { width: calc(var(--s) * 21px); height: calc(var(--s) * 21px); fill: currentColor; shape-rendering: crispEdges; }
+.sol-card {
+    border: calc(var(--s) * 1px) solid var(--card-edge);
+    background: var(--card-face);
+}
+.sol-card.red   { color: var(--card-red); }
+.sol-card.black { color: var(--card-black); }
+.sol-card.dragging { will-change: transform; }
+.sol-card.gone { visibility: hidden; }
+/* rewers: kafelek z tego samego arkusza co portrety */
+.sol-card.down {
+    background: url("assets/solitaire/portraits.png") 0 calc(var(--s) * -216px) / calc(var(--s) * 480px) auto no-repeat;
+    background-origin: border-box;
+    image-rendering: pixelated;
+}
+.sol-card.down > * { display: none; }
+.sol-idx {
+    position: absolute;
+    display: flex;
+    gap: calc(var(--s) * 1px);
+    font: calc(var(--s) * 8px) / 1 var(--font);
+}
+.sol-idx b { font-weight: normal; }
+.sol-idx.tl { left: calc(var(--s) * 2px); top: calc(var(--s) * 2px); }
+.sol-idx.br { right: calc(var(--s) * 2px); bottom: calc(var(--s) * 2px); transform: rotate(180deg); }
+.sol-suit { width: calc(var(--s) * 7px); height: calc(var(--s) * 7px); fill: currentColor; shape-rendering: crispEdges; }
+.sol-art {
+    position: absolute;
+    left: calc(var(--s) * 3px);
+    top: calc(var(--s) * 11px);
+    width: calc(var(--s) * 48px);
+    height: calc(var(--s) * 54px);
+    background-image: url("assets/solitaire/portraits.png");
+    background-size: calc(var(--s) * 480px) auto;
+    image-rendering: pixelated;
+    box-shadow: 0 0 0 calc(var(--s) * 1px) var(--card-art-edge);
+}
+/* animacja wygranej (canvas nad stołem) */
+.sol-fx {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3000;
+    image-rendering: pixelated;
+}
+.sol-menu-label { display: flex; align-items: center; gap: 6px; }
+.sol-check { width: 12px; display: inline-flex; }
+.sol-check-svg { width: 12px; height: 10px; fill: currentColor; shape-rendering: crispEdges; }
+
+/* okienko "How to Play" pasjansa: tekst jak w Notatniku + OK i "Don't show this again" */
+.sol-help { display: flex; flex-direction: column; height: 100%; gap: 8px; }
+.sol-help .notepad-text { font-size: 8px; line-height: 2.2; }
+.sol-help-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 2px 2px 4px; }
+.sol-help-foot .win-btn { min-width: 96px; }
+.sol-help-check { display: flex; align-items: center; gap: 8px; font-size: 8px; cursor: pointer; }
+.sol-help-check input { width: 14px; height: 14px; accent-color: var(--select-bg); }
+
+/* ===================================================================== */
+/*  PRIMO-MAN (pacman.js) - plansza to <canvas> 224x248 powiększony      */
+/*  całkowicie (x1, x2, x3); --s = skala ustawiana przez JS              */
+/* ===================================================================== */
+
+.pac { display: flex; flex-direction: column; height: 100%; gap: 4px; }
+.pac-hud {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    padding: 6px 8px;
+    background: var(--pac-hud-bg);
+    color: var(--pac-hud-text);
+    font-size: 8px;
+}
+.pac-high { flex: 1; text-align: center; }
+.pac-lives { display: block; width: 48px; height: 16px; image-rendering: pixelated; }
+.pac-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--pac-bg);
+}
+.pac-stage:focus { outline: none; }
+.pac-box { --s: 2; position: relative; line-height: 0; }
+.pac-canvas { display: block; image-rendering: pixelated; }
+/* READY! itp. - pod domkiem szlamów, jak w automacie */
+.pac-msg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--s) * 132px);
+    font-size: calc(var(--s) * 8px);
+    line-height: 1.6;
+    text-align: center;
+    white-space: pre;
+    color: var(--pac-msg);
+    text-shadow: calc(var(--s) * 1px) calc(var(--s) * 1px) 0 var(--pac-msg-shadow);
+    pointer-events: none;
+}
+.pac-msg.pac-msg-big {
+    top: calc(var(--s) * 84px);
+    left: calc(var(--s) * 24px);
+    right: calc(var(--s) * 24px);
+    padding: calc(var(--s) * 8px) 0;
+    background: var(--pac-msg-bg);
+}
+
+/* ===================================================================== */
+/*  SIGIL SNAKE (snake.js) - plansza <canvas> 320x240 (x1, x2, x3),     */
+/*  nad nią panel ołtarza "Kitty Flame" i karta z kotkiem (DOM, --s)     */
+/* ===================================================================== */
+
+.snk { display: flex; flex-direction: column; height: 100%; gap: 4px; }
+.snk-hud {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+    padding: 3px 4px 3px 8px;
+    background: var(--snk-hud-bg);
+    color: var(--snk-hud-text);
+    font-size: 8px;
+}
+.snk-tok { display: flex; align-items: center; gap: 6px; }
+.snk-tok img { display: block; width: 16px; height: 16px; }
+.snk-tok.full { color: var(--snk-tok-full); }
+.snk-tok.bump img { animation: snk-bump 0.3s steps(3); }
+.snk-high { flex: 1; }
+.snk-altar-btn { padding: 5px 10px; }
+.snk-altar-btn:active { padding: 7px 8px 3px 12px; }
+.snk-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--snk-hud-bg);
+}
+.snk-stage:focus { outline: none; }
+.snk-box { --s: 2; position: relative; flex-shrink: 0; overflow: hidden; }
+.snk-canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.snk-msg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: calc(var(--s) * 6px) calc(var(--s) * 10px);
+    font-size: calc(var(--s) * 8px);
+    line-height: 1.6;
+    text-align: center;
+    white-space: pre;
+    color: var(--snk-msg);
+    background: var(--snk-msg-bg);
+    text-shadow: calc(var(--s) * 1px) calc(var(--s) * 1px) 0 var(--snk-msg-shadow);
+    pointer-events: none;
+}
+
+/* panel ołtarza po prawej (jak Tona's Flame w Genshinie) */
+.snk-altar { position: absolute; inset: 0; }
+.snk-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: calc(var(--s) * 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--s) * 4px);
+    padding: calc(var(--s) * 6px) calc(var(--s) * 5px);
+    background: var(--snk-panel-bg);
+    color: var(--snk-panel-text);
+    font-size: calc(var(--s) * 4px);
+    line-height: 1.7;
+    text-align: center;
+}
+.snk-title { font-size: calc(var(--s) * 5px); }
+.snk-x {
+    position: absolute;
+    top: calc(var(--s) * 4px);
+    right: calc(var(--s) * 4px);
+    width: calc(var(--s) * 10px);
+    height: calc(var(--s) * 10px);
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--snk-x-bg);
+    color: var(--snk-x-text);
+    font: calc(var(--s) * 7px) / 1 var(--font);
+    cursor: pointer;
+}
+.snk-main, .snk-rewview {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--s) * 4px);
+}
+.snk-emblem { position: relative; width: calc(var(--s) * 48px); height: calc(var(--s) * 56px); }
+.snk-emblem img { display: block; width: 100%; }
+.snk-lvl {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: calc(var(--s) * 14px);
+    height: calc(var(--s) * 14px);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+    background: var(--snk-lvl-bg);
+    box-shadow: inset 0 0 0 calc(var(--s) * 1px) var(--snk-lvl-edge);
+    color: var(--snk-lvl-text);
+    font-size: calc(var(--s) * 4px);
+}
+.snk-sub { color: var(--snk-panel-dim); }
+.snk-rew-row { display: flex; gap: calc(var(--s) * 3px); }
+.snk-slot {
+    width: calc(var(--s) * 22px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    border-radius: calc(var(--s) * 2px) calc(var(--s) * 6px) calc(var(--s) * 2px) calc(var(--s) * 2px);
+    background: var(--snk-slot-bg);
+}
+.snk-slot img { display: block; width: calc(var(--s) * 16px); margin: calc(var(--s) * 2px) 0; }
+.snk-slot span { width: 100%; background: var(--snk-slot-foot); color: var(--snk-slot-text); }
+.snk-req-h { width: 100%; display: flex; align-items: center; gap: calc(var(--s) * 3px); color: var(--snk-panel-dim); }
+.snk-req-h::before,
+.snk-req-h::after { content: ""; flex: 1; height: 1px; background: var(--snk-panel-line); }
+.snk-req { width: 100%; display: flex; align-items: center; gap: calc(var(--s) * 3px); text-align: left; }
+.snk-req-ic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--s) * 12px);
+    height: calc(var(--s) * 12px);
+    border-radius: calc(var(--s) * 2px);
+    background: var(--snk-req-ic-bg);
+}
+.snk-req-ic img { display: block; width: calc(var(--s) * 8px); }
+.snk-req-name { flex: 1; }
+.snk-req-n { font-weight: normal; color: var(--snk-req-ok); }
+.snk-req.short .snk-req-n { color: var(--snk-req-short); }
+.snk-req.shake { animation: snk-shake 0.3s steps(4); }
+.snk-rew-info { color: var(--snk-panel-dim); text-align: left; }
+.snk-gallery {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(var(--s) * 3px);
+    overflow-y: auto;
+}
+.snk-thumb {
+    aspect-ratio: 1;
+    padding: calc(var(--s) * 1px);
+    border: 0;
+    background: var(--snk-lvl-edge);
+    cursor: pointer;
+}
+.snk-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.snk-empty { grid-column: 1 / -1; color: var(--snk-panel-dim); }
+.snk-pills { width: 100%; display: flex; gap: calc(var(--s) * 3px); }
+.snk-pill {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: calc(var(--s) * 3px);
+    padding: calc(var(--s) * 2px) calc(var(--s) * 4px) calc(var(--s) * 2px) calc(var(--s) * 2px);
+    border: 0;
+    border-radius: calc(var(--s) * 8px);
+    background: var(--snk-pill-bg);
+    color: var(--snk-pill-text);
+    font: calc(var(--s) * 4px) / 1 var(--font);
+    cursor: pointer;
+}
+.snk-pill:hover { background: var(--snk-pill-hover); }
+.snk-pill.on { box-shadow: 0 0 0 calc(var(--s) * 1px) var(--snk-pill-ic); }
+.snk-pill.dim { opacity: 0.6; }
+.snk-pill:disabled { opacity: 0.4; cursor: default; }
+.snk-pill span { flex: 1; text-align: center; }
+.snk-pill i {
+    position: relative;
+    flex-shrink: 0;
+    width: calc(var(--s) * 9px);
+    height: calc(var(--s) * 9px);
+    border-radius: 50%;
+    background: var(--snk-pill-ic-bg);
+}
+/* ikonki z guzików Genshina: żółty pierścień (Rewards) i strzałka w górę (Offer) */
+.snk-ic-ring::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--s) * 2px);
+    border: calc(var(--s) * 1px) solid var(--snk-pill-ic);
+    border-radius: 50%;
+}
+.snk-ic-up::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--s) * 2px);
+    background: var(--snk-pill-ic);
+    clip-path: polygon(50% 0, 100% 55%, 68% 55%, 68% 100%, 32% 100%, 32% 55%, 0 55%);
+}
+
+/* karta z kotkiem po złożeniu ofiary */
+.snk-reveal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--snk-reveal-dim);
+}
+.snk-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--s) * 4px);
+    padding: calc(var(--s) * 7px) calc(var(--s) * 10px);
+    background: var(--win-face);
+    color: var(--win-text);
+    font-size: calc(var(--s) * 4px);
+    line-height: 1.6;
+    animation: snk-pop 0.3s steps(5);
+}
+.snk-card-t { font-size: calc(var(--s) * 5px); text-shadow: calc(var(--s) * 0.5px) calc(var(--s) * 0.5px) 0 var(--pink-dark); }
+.snk-frame {
+    position: relative;
+    padding: calc(var(--s) * 3px);
+    background: var(--snk-frame-bg);
+    box-shadow:
+        0 0 0 calc(var(--s) * 1px) var(--snk-frame-gold),
+        0 0 0 calc(var(--s) * 2px) var(--snk-body-dark);
+}
+.snk-cat { display: block; width: calc(var(--s) * 96px); height: calc(var(--s) * 96px); image-rendering: pixelated; }
+.snk-frame.show .snk-cat { animation: snk-reveal 0.7s steps(7); }
+.snk-loading {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--snk-panel-text);
+}
+.snk-loading::after { content: "..."; animation: blink 0.8s steps(1) infinite; }
+.snk-frame.wait .snk-loading { display: flex; }
+.snk-card-src { opacity: 0.85; }
+.snk-cont { font-size: calc(var(--s) * 4px); }
+
+@keyframes snk-bump { 50% { transform: translateY(-3px) scale(1.25); } }
+@keyframes snk-shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+@keyframes snk-pop { from { transform: scale(0.3); } }
+@keyframes snk-reveal { from { opacity: 0; filter: brightness(3); } }
+
+/* ===================================================================== */
+/*  SLIME INVADERS (invaders.js) - plansza <canvas> 224x248 (x1, x2, x3) */
+/*  jak w Primo-Man; --s = skala ustawiana przez JS                      */
+/* ===================================================================== */
+
+.inv { display: flex; flex-direction: column; height: 100%; gap: 4px; }
+.inv-hud {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    padding: 6px 8px;
+    background: var(--inv-hud-bg);
+    color: var(--inv-hud-text);
+    font-size: 8px;
+}
+.inv-high { flex: 1; text-align: center; }
+.inv-lives { display: block; width: 64px; height: 14px; image-rendering: pixelated; }
+.inv-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--inv-sky-top);
+}
+.inv-stage:focus { outline: none; }
+.inv-box { --s: 2; position: relative; line-height: 0; }
+.inv-canvas { display: block; image-rendering: pixelated; }
+.inv-msg {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%);
+    padding: calc(var(--s) * 6px) calc(var(--s) * 10px);
+    font-size: calc(var(--s) * 8px);
+    line-height: 1.6;
+    text-align: center;
+    white-space: pre;
+    color: var(--inv-msg);
+    background: var(--inv-msg-bg);
+    text-shadow: calc(var(--s) * 1px) calc(var(--s) * 1px) 0 var(--inv-msg-shadow);
+    pointer-events: none;
+}
+/* "PRESS SPACE" na ekranie tytułowym - nad Citlali, bez tła */
+.inv-msg.inv-msg-title { top: calc(var(--s) * 192px); background: none; padding: 0; }
+
+/* ===================================================================== */
+/*  CITLALI RUN (runner.js) - płótno 320x240 (x1, x2, x3), --s = skala   */
+/* ===================================================================== */
+
+.run { display: flex; flex-direction: column; height: 100%; gap: 4px; }
+.run-hud {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    background: var(--run-hud-bg);
+    color: var(--run-hud-text);
+    font-size: 8px;
+}
+.run-dist { min-width: 72px; }
+.run-gems { display: flex; align-items: center; gap: 6px; min-width: 56px; }
+.run-gems img { display: block; width: 16px; height: 16px; image-rendering: pixelated; }
+.run-gems.bump img { animation: snk-bump 0.3s steps(3); }
+.run-score { flex: 1; text-align: center; }
+.run-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--run-hud-bg);
+}
+.run-stage:focus { outline: none; }
+.run-box { --s: 2; position: relative; flex-shrink: 0; overflow: hidden; }
+.run-canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.run-msg {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    padding: calc(var(--s) * 6px) calc(var(--s) * 10px);
+    font-size: calc(var(--s) * 7px);
+    line-height: 1.6;
+    text-align: center;
+    white-space: pre;
+    color: var(--run-msg);
+    background: var(--run-msg-bg);
+    text-shadow: calc(var(--s) * 1px) calc(var(--s) * 1px) 0 var(--run-msg-shadow);
+    pointer-events: none;
+}
+
+/* ===================================================================== */
+/*  15. HIGH SCORES - ikona na środku pulpitu i okno z tabelą wyników    */
+/* ===================================================================== */
+
+/* ikona z flagą center (desktop.js) stoi na środku pulpitu, poza siatką */
+.icon.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--cell-w);
+    transform: translate(-50%, -50%);
+}
+.icon.center img { animation: lb-bob 1.6s steps(2) infinite; }
+
+.lb {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    padding: 6px;
+    background: var(--lb-bg);
+    color: var(--lb-text);
+    font-size: 8px;
+    line-height: 1.8;
+}
+.lb-head { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.lb-title {
+    margin: 0;
+    font-size: 14px;
+    color: var(--lb-title);
+    text-shadow: 2px 2px 0 var(--lb-title-shadow);
+    animation: lb-blink 1.2s steps(2) infinite;
+}
+.lb-cup { position: relative; width: 32px; height: 32px; }
+.lb-cup img { display: block; width: 32px; height: 32px; image-rendering: pixelated; animation: lb-bob 1.6s steps(2) infinite; }
+/* iskierki: mrugające pixelowe krzyżyki wokół pucharu */
+.lb-spark {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--lb-spark);
+    box-shadow: 2px 0 0 var(--lb-spark), -2px 0 0 var(--lb-spark), 0 2px 0 var(--lb-spark), 0 -2px 0 var(--lb-spark);
+    opacity: 0;
+    animation: lb-spark 1.6s steps(1) infinite;
+}
+.lb-spark.s0 { left: 2px;  top: 4px;  animation-delay: 0s; }
+.lb-spark.s1 { left: 28px; top: 10px; animation-delay: 0.4s; }
+.lb-spark.s2 { left: 6px;  top: 22px; animation-delay: 0.8s; }
+.lb-spark.s3 { left: 26px; top: 26px; animation-delay: 1.2s; }
+
+.lb-list { flex: 1; min-height: 0; overflow: auto; padding: 8px 12px; }
+.lb-game + .lb-game { margin-top: 10px; }
+.lb-game-title { margin: 0 0 4px; font-size: 9px; color: var(--lb-game); text-shadow: 1px 1px 0 var(--shadow); }
+.lb-table { width: 100%; border-collapse: collapse; }
+.lb-table td { padding: 3px 4px; border-bottom: 2px dotted var(--lb-line); }
+.lb-rank { width: 28px; text-align: center; }
+.lb-score { text-align: right; color: var(--lb-score); }
+.lb-empty { text-align: center; opacity: 0.7; }
+/* medale: pixelowe kółko z cyfrą, 1. miejsce lekko mruga */
+.lb-medal {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    color: var(--lb-medal-ink);
+    clip-path: polygon(25% 0, 75% 0, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0 75%, 0 25%);
+}
+.lb-medal.gold   { background: var(--lb-gold); animation: lb-blink 1.2s steps(2) infinite; }
+.lb-medal.silver { background: var(--lb-silver); }
+.lb-medal.bronze { background: var(--lb-bronze); }
+tr.gold .lb-name { color: var(--lb-gold); }
+.lb-note { margin: 0; text-align: center; color: var(--lb-note); }
+
+@keyframes lb-bob   { 50% { transform: translateY(-2px); } }
+@keyframes lb-blink { 50% { opacity: 0.75; } }
+@keyframes lb-spark { 0% { opacity: 1; } 25% { opacity: 0; } }
